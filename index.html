@@ -9,38 +9,46 @@
   <body>
     Hans 3.0
     <br />
-    <input id="account" placeholder="account" />
-    <br />
-    <input id="location" placeholder="location" />
-    <br />
-    <input id="api" placeholder="api" />
-    <br />
-    <input type="button" value="listReviews()" onclick="executar()" />
+    <ul>
+      <li>author_name - rating - text</li>
+      <li>author_name - rating - text</li>
+      <li>author_name - rating - text</li>
+      <li>author_name - rating - text</li>
+    </ul>
 
+    <div id="substituir">
+      <h1>vou ser substuido</h1>
+    </div>
     <script>
-      async function listReviews() {
-        const accountId = account.value;
-        const locationId = location.value;
-        const apiKey = api.value;
-
-        const response = await fetch(
-          //   `https://mybusiness.googleapis.com/v4/${accountId}/locations/${locationId}/reviews`,
-          "https://mybusiness.googleapis.com/v4/accounts",
-          {
-            headers: {
-              Authorization: `Bearer ${apiKey}`,
-            },
+      async function abcd() {
+        try {
+          const reviews = await fetch("http://localhost:10000/reviews").then(
+            (res) => res.json()
+          );
+          let acumulador = "";
+          if (reviews.length === 0) {
+            acumulador = "<span>Nao temos reviews sobre esse cara</span>";
+          } else {
+            for (let i = 0; i < reviews.length; i++) {
+              const review = reviews[i];
+              acumulador =
+                acumulador +
+                "<li>" +
+                review.author_name +
+                " - " +
+                review.rating +
+                " - " +
+                review.text +
+                "</li>";
+            }
           }
-        );
-        const reviews = await response.json();
-        console.log(reviews);
+          let stringHtml = "<ul>" + acumulador + "</ul>";
+          substituir.innerHTML = stringHtml;
+        } catch (error) {
+          substituir.innerHTML = "Não conseguimos fazer o download de reviews";
+        }
       }
-
-      function executar() {
-        listReviews();
-      }
-
-      console.log("Carreguei completo");
+      abcd();
     </script>
   </body>
 </html>
