@@ -19,3 +19,5 @@ async function listReviews() {
 function executar() {
   listReviews();
 }
+
+console.log("Carreguei completo");
